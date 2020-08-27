@@ -1,18 +1,50 @@
 import React, { useState } from "react";
-import "antd/dist/antd.css";
-import { Card, Input, Icon, Button, Spin } from "antd";
+import { Card, Input, Icon, Button, Spin, message } from "antd";
 import "../static/css/Login.css";
-function Login() {
+import axios from "axios";
+import { localSet } from "../tools/index";
+function Login(props) {
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const checkLogin = () => {
     setIsLoading(true);
-    setTimeout(() => {
+    if (!userName) {
+      message.error("用户名不为空");
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      return false;
+    } else if (!passWord) {
+      message.error("慢慢不能为空");
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+      return false;
+    }
+    let dataProps = {
+      userNmae,
+      passWord,
+    };
+
+    axios({
+      method: "post",
+      url: "",
+      data: dataProps,
+      withCredentials: true,
+    }).then((res) => {
       setIsLoading(false);
-    }, 1000);
+      if (res.data.data == "登录成功") {
+        localSet("openid", res.data.openid);
+        props.history.push("/index");
+        message.success("登录成功!!!");
+      } else {
+        message.error("用户名密码错误");
+      }
+    });
   };
+
   return (
     <div className="login-div">
       <Spin tip="loading..." spinning={isLoading}>
