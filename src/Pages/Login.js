@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Card, Input, Icon, Button, Spin, message } from "antd";
+import { Card, Input, Button, Spin, message } from "antd";
 import "../static/css/Login.css";
 import axios from "axios";
 import { localSet } from "../tools/index";
+import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 function Login(props) {
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
@@ -24,7 +25,7 @@ function Login(props) {
       return false;
     }
     let dataProps = {
-      userNmae,
+      userName,
       passWord,
     };
 
@@ -35,7 +36,7 @@ function Login(props) {
       withCredentials: true,
     }).then((res) => {
       setIsLoading(false);
-      if (res.data.data == "登录成功") {
+      if (res.data.data === "登录成功") {
         localSet("openid", res.data.openid);
         props.history.push("/index");
         message.success("登录成功!!!");
@@ -58,7 +59,8 @@ function Login(props) {
             size="large"
             placeholder="enter your username"
             prefix={
-              <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }}></Icon>
+              <UserOutlined />
+              // <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }}></Icon>
             }
             onChange={(e) => {
               setUserName(e.target.value);
@@ -70,7 +72,8 @@ function Login(props) {
             size="large"
             placeholder="enter your passWord"
             prefix={
-              <Icon type="key" style={{ color: "rgba(0,0,0,.25)" }}></Icon>
+              <KeyOutlined />
+              // <Icon type="key" style={{ color: "rgba(0,0,0,.25)" }}></Icon>
             }
             onChange={(e) => {
               setPassWord(e.target.value);

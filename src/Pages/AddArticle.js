@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import marked from "marked";
 import "../static/css/AddArticle.css";
 import { Row, Col, Input, Select, Button, DatePicker, message } from "antd";
-const { Option } = Select;
-const { TextArea } = Input;
 import axios from "axios";
 import { localRemove } from "../tools/index";
-function AddArticle() {
+const { Option } = Select;
+const { TextArea } = Input;
+
+function AddArticle(props) {
   const [articleId, setArticleId] = useState(0); // 文章的ID，如果是0说明是新增加，如果不是0，说明是修改
   const [articleTitle, setArticleTitle] = useState(""); //文章标题
   const [articleContent, setArticleContent] = useState(""); //markdown的编辑内容
@@ -55,7 +56,7 @@ function AddArticle() {
       url: "",
       withCredentials: true,
     }).then((res) => {
-      if (res.data.data == "没有登录") {
+      if (res.data.data === "没有登录") {
         localRemove("openid");
         props.history.push("/login");
       } else {
@@ -95,7 +96,7 @@ function AddArticle() {
     let dataText = showDate.replace("-", "/");
     dataProps.addTime = new Date(dataText).getTime() / 1000;
 
-    if (articleId == 0) {
+    if (articleId === 0) {
       dataProps.view_count = 0;
       axios({
         method: "post",
@@ -144,7 +145,7 @@ function AddArticle() {
                 value={articleTitle}
               />
             </Col>
-            <Coc span={4}>
+            <Col span={4}>
               &nbsp;
               <Select
                 defaultValue={selectedType}
@@ -159,7 +160,7 @@ function AddArticle() {
                   );
                 })}
               </Select>
-            </Coc>
+            </Col>
           </Row>
           <br />
           {/* //主体 */}

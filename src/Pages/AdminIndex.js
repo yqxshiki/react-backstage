@@ -10,17 +10,24 @@ import {
 import "../static/css/AdminIndex.css";
 import { Route } from "react-router-dom";
 import AddArticle from "./AddArticle";
-
+import ArticleList from "./ArticleList";
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-function AdminIndex() {
+function AdminIndex(props) {
   const [collapsed, setCollapsed] = useState(false);
 
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
 
+  const handleClickArticle = (e) => {
+    if (e.key === "AddArticle") {
+      props.history.push("/index/add/");
+    } else if (e.key === "ArticleList") {
+      props.history.push("/index/list/");
+    }
+  };
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
@@ -29,12 +36,17 @@ function AdminIndex() {
           <Menu.Item key="1" icon={<PieChartOutlined />}>
             工作台
           </Menu.Item>
-          <Menu.Item key="2" icon={<DesktopOutlined />}>
+          <Menu.Item key="AddArticle" icon={<DesktopOutlined />}>
             添加文章
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-            <Menu.Item key="3">Tom</Menu.Item>
-            <Menu.Item key="4">Bill</Menu.Item>
+          <SubMenu
+            key="sub1"
+            onTitleClick={handleClickArticle}
+            icon={<UserOutlined />}
+            title="文章管理"
+          >
+            <Menu.Item key="AddArticle">添加文章</Menu.Item>
+            <Menu.Item key="ArticleList">文章列表</Menu.Item>
             <Menu.Item key="5">Alex</Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
@@ -47,7 +59,7 @@ function AdminIndex() {
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        {/* <Header className="site-layout-background" style={{ padding: 0 }} /> */}
+        <Header className="site-layout-background" style={{ padding: 0 }} />
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>后台管理系统</Breadcrumb.Item>
@@ -58,7 +70,9 @@ function AdminIndex() {
             style={{ padding: 24, minHeight: 360 }}
           >
             <div>
-              <Route path="/index/" component={AddArticle} />
+              <Route path="/index/" exact component={AddArticle} />
+              <Route path="/index/add/" exact component={AddArticle} />
+              <Route path="/index/list/" exact component={ArticleList} />
             </div>
           </div>
         </Content>
